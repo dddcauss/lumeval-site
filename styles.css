@@ -64,8 +64,9 @@ a {
 }
 
 .brand {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
@@ -352,7 +353,7 @@ h3 {
 .pathway-row {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
+  gap: 14px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -360,9 +361,12 @@ h3 {
 }
 
 .pathway-row li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   position: relative;
-  min-height: 92px;
-  padding: 18px 14px 14px;
+  min-height: 104px;
+  padding: 1.1rem 1.25rem;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -377,9 +381,11 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin-bottom: 12px;
+  flex: 0 0 auto;
+  min-width: 2rem;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0;
   border-radius: 999px;
   background: var(--teal);
   color: #fff;
@@ -389,9 +395,9 @@ h3 {
 .pathway-row li:not(:last-child)::after {
   content: "";
   position: absolute;
-  top: 45px;
-  right: -10px;
-  width: 10px;
+  top: 50%;
+  right: -14px;
+  width: 14px;
   height: 1px;
   background: var(--steel);
 }
@@ -465,14 +471,15 @@ h3 {
   .fit-strip {
     margin-top: 0;
     padding-top: 24px;
+    padding-bottom: 8px;
   }
 
   .pathway-row li:not(:last-child)::after {
     top: auto;
     right: auto;
-    left: 26px;
-    bottom: -10px;
+    left: 2.25rem;
+    bottom: -14px;
     width: 1px;
-    height: 10px;
+    height: 14px;
   }
 }
