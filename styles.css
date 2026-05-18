@@ -1381,3 +1381,29 @@ body {
     white-space: normal;
   }
 }
+
+/* Emergency rendering repair: keep the hero dark so its light text is readable. */
+.hero .container {
+  background: var(--navy);
+  color: var(--panel);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.hero .eyebrow,
+.hero .micro-eyebrow {
+  color: rgba(247, 244, 238, 0.76);
+}
+
+.hero-headline,
+.hero-thesis {
+  color: var(--panel);
+}
+
+.hero-lede {
+  color: rgba(247, 244, 238, 0.74);
+}
+
+.hero-lede-strong,
+.founder-line {
+  color: rgba(247, 244, 238, 0.92);
+}
