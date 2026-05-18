@@ -16,9 +16,10 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <nav class="nav" aria-label="Primary navigation">
-        <a class="brand" href="#top">Lumeval</a>
+        <a class="brand" href="#main">Lumeval</a>
         <div class="nav-links">
           <a href="#problem">Problem</a>
           <a href="#scan">Signal Scan</a>
@@ -29,7 +30,7 @@
       </nav>
     </header>
 
-    <main id="top">
+    <main id="main">
       <section class="hero">
         <div class="hero-content">
           <div class="hero-copy">
@@ -62,15 +63,18 @@
 
       <section id="problem" class="section">
         <div class="section-heading">
-          <h2>Problem</h2>
-          <p>Remote workforce diagnostic issues are often fragmented across site health, imaging providers, medical travel, occupational health, disability management, return-to-work, and operations.</p>
+          <div>
+            <p class="section-eyebrow">The next preventable failure point</p>
+            <h2>In remote workforces, prevention does not end when the incident is controlled.</h2>
+          </div>
+          <p>Strong site safety programs help prevent injuries before they happen. But after a workplace injury or symptom report, diagnostic pathways can still fail across imaging access, medical travel, occupational health, disability management, return-to-work, and operations.</p>
         </div>
         <div class="list-grid" aria-label="Diagnostic pathway friction points">
           <div class="list-item">delayed MRI/CT access</div>
           <div class="list-item">repeat or incomplete imaging</div>
-          <div class="list-item">medical travel burden</div>
-          <div class="list-item">follow-up gaps</div>
-          <div class="list-item">MSK pathway friction</div>
+          <div class="list-item">medical travel delays</div>
+          <div class="list-item">missed follow-up after abnormal findings</div>
+          <div class="list-item">unclear MSK diagnosis</div>
           <div class="list-item">return-to-work uncertainty</div>
         </div>
       </section>
@@ -120,8 +124,8 @@
 
       <section id="deliverables" class="section">
         <div class="section-heading">
-          <h2>What the scan delivers</h2>
-          <p>A practical post-incident prevention readout, not a data platform.</p>
+          <h2>A practical post-incident prevention readout, not a data platform.</h2>
+          <p>The scan is designed to produce a decision-ready summary without creating a new surveillance system or collecting individual health data for employer use.</p>
         </div>
         <ul class="deliverable-list">
           <li>8-12 page aggregate signal report</li>
@@ -137,20 +141,30 @@
           <h2>Privacy and Worker Trust</h2>
           <p>Lumeval is prevention- and pathway-focused. Employer-facing outputs are aggregate and de-identified, and individual clinical information remains clinically governed.</p>
         </div>
-        <ul class="trust-list">
-          <li>aggregate-only employer reporting</li>
-          <li>no individual worker dashboard</li>
-          <li>small-cell suppression for small groups</li>
-          <li>no claims adjudication</li>
-          <li>no IME</li>
-          <li>no fitness-for-duty assessment</li>
-          <li>no legal causation opinions</li>
-          <li>no employer access to individual worker medical information</li>
-          <li>no private MRI sales</li>
-          <li>no routine screening</li>
-          <li>individual clinical information remains clinically governed</li>
-          <li>Indigenous data-governance pathways where applicable</li>
-        </ul>
+        <div class="privacy-grid">
+          <div class="privacy-card">
+            <h3>Employer reporting boundaries</h3>
+            <ul class="trust-list">
+              <li>aggregate-only employer reporting</li>
+              <li>no individual worker dashboard</li>
+              <li>small-cell suppression</li>
+              <li>no employer access to individual worker medical information</li>
+              <li>individual clinical information remains clinically governed</li>
+              <li>Indigenous data-governance pathways where applicable</li>
+            </ul>
+          </div>
+          <div class="privacy-card">
+            <h3>Not part of the service</h3>
+            <ul class="trust-list">
+              <li>no claims adjudication</li>
+              <li>no IME</li>
+              <li>no fitness-for-duty assessment</li>
+              <li>no private MRI sales</li>
+              <li>no routine screening</li>
+              <li>no legal causation opinions</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section id="buyers" class="section">
