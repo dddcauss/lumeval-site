@@ -1572,3 +1572,22 @@ body {
     white-space: normal;
   }
 }
+
+/* Hero trust boundary: restrained institutional emphasis */
+.hero-trust-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.6;
+  color: rgba(247, 244, 238, 0.9);
+  max-width: 780px;
+  margin: 8px 0 28px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(216, 210, 196, 0.28);
+  border-bottom: 1px solid rgba(216, 210, 196, 0.28);
+}
+
+.hero-founder {
+  display: block;
+  margin-bottom: 30px;
+}
