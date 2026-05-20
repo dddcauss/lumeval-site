@@ -1591,3 +1591,71 @@ body {
   display: block;
   margin-bottom: 30px;
 }
+
+/* Targeted refinement pass: stronger hierarchy and wider service cards */
+.hero-trust-line {
+  max-width: 900px;
+  margin: 28px 0 28px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(247, 244, 238, 0.22);
+  border-bottom: 1px solid rgba(247, 244, 238, 0.22);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.45;
+  color: rgba(247, 244, 238, 0.92);
+}
+
+.section-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  opacity: 0.76;
+  margin-bottom: 26px;
+}
+
+.section-heading-left h2,
+.section-heading h2,
+.gap-vendor-headline {
+  font-size: clamp(42px, 5.8vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  max-width: 760px;
+}
+
+.pathway-service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+  border-left: 1px solid var(--hairline);
+}
+
+.pathway-service-card {
+  padding: clamp(32px, 4vw, 52px);
+  border-right: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--panel-light);
+  min-height: 260px;
+}
+
+.pathway-service-card h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.3vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+}
+
+.pathway-service-card p:not(.card-index) {
+  font-size: 15px;
+  line-height: 1.75;
+  max-width: 520px;
+  color: var(--muted);
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .pathway-service-grid {
+    grid-template-columns: 1fr;
+  }
+}
