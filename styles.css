@@ -2858,3 +2858,53 @@ textarea:focus-visible {
   }
   .case-timeline .window::after { display: none; }
 }
+
+
+/* Targeted link additions: booking fallback, founder LinkedIn, privacy notice. */
+.booking-email,
+.contact-privacy {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: rgba(247, 245, 240, 0.78);
+}
+.booking-email a,
+.contact-privacy a,
+.footer-line a {
+  border-bottom: 1px solid currentColor;
+}
+.booking-email a:hover,
+.contact-privacy a:hover,
+.footer-line a:hover {
+  border-bottom-color: transparent;
+}
+.founder-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  color: var(--navy);
+  font-weight: 600;
+  background: #fff;
+  box-shadow: var(--shadow-soft);
+}
+.linkedin-icon {
+  width: 20px;
+  height: 20px;
+}
+.privacy-hero .hero-inner {
+  min-height: auto;
+}
+.privacy-notice-panel {
+  max-width: 900px;
+}
+.privacy-notice-panel h2 {
+  font-size: clamp(26px, 3vw, 38px);
+  margin-top: 34px;
+  margin-bottom: 10px;
+}
+.privacy-notice-panel h2:first-child {
+  margin-top: 0;
+}
