@@ -2880,19 +2880,23 @@ textarea:focus-visible {
 .founder-link {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-top: 18px;
-  padding: 10px 14px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: 999px;
   color: var(--navy);
   font-weight: 600;
-  background: #fff;
-  box-shadow: var(--shadow-soft);
+  line-height: 1.4;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+.founder-link:hover,
+.founder-link:focus {
+  border-bottom-color: transparent;
 }
 .linkedin-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  vertical-align: -3px;
 }
 .privacy-hero .hero-inner {
   min-height: auto;
