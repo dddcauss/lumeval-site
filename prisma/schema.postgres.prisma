@@ -1,0 +1,152 @@
+// ============================================================
+// PRODUCTION SCHEMA — PostgreSQL
+// ============================================================
+// This is the production schema for Lumeval. Use this when deploying
+// to Vercel/Render/Fly/etc. with a managed Postgres database.
+//
+// TO SWITCH FROM LOCAL SQLITE TO PRODUCTION POSTGRES:
+//   1. cp prisma/schema.postgres.prisma prisma/schema.prisma
+//   2. Set DATABASE_URL="postgresql://user:pass@host:5432/lumeval" in .env
+//   3. bun run db:push   (creates tables in your Postgres instance)
+//   4. bun run db:generate
+//
+// See DEPLOYMENT.md for full instructions.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- MSK PASSPORT ----------
+
+model Worker {
+  id            String   @id @default(cuid())
+  handle        String   @unique
+  passHash      String
+  region        String?
+  sector        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // ----- REGISTRY CONSENT -----
+  registryConsentGrantedAt  DateTime?
+  registryConsentRevokedAt  DateTime?
+  registryConsentScope      String?
+
+  verdicts      Verdict[]
+  grants        ConsentGrant[]
+}
+
+model Verdict {
+  id            String   @id @default(cuid())
+  workerId      String
+  worker        Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  bodyPart      String
+  modality      String
+  questionAsked String
+  answer        String
+  finding       String
+  nextStep      String
+  signedBy      String
+  signedAt      DateTime @default(now())
+  limitation    String
+  createdAt     DateTime @default(now())
+
+  @@index([workerId])
+}
+
+model ConsentGrant {
+  id            String   @id @default(cuid())
+  workerId      String
+  worker        Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  granteeType   String
+  granteeName   String
+  scope         String   @default("verdicts")
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([workerId])
+}
+
+// ---------- STUCK-FILE DIAGNOSTIC ----------
+
+model DiagnosticAssessment {
+  id            String   @id @default(cuid())
+  clientHandle  String
+  reviewerEmail String?
+  createdAt     DateTime @default(now())
+  totalOpenCases Int
+  cases90to180   Int
+  cases180Plus   Int
+  litigatedVisibilityOnly Int
+  cases          DiagnosticCase[]
+  estAvoidableDaysLow  Int
+  estAvoidableDaysHigh Int
+  estExposureLow       Int
+  estExposureHigh      Int
+  profileJson  String
+}
+
+model DiagnosticCase {
+  id            String   @id @default(cuid())
+  assessmentId  String
+  assessment    DiagnosticAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  caseRef       String
+  bodyPart      String
+  caseAgeDays   Int
+  bottleneck    String
+  status        String   @default("open")
+  ownerAssigned String?
+  deadlineDays  Int?
+  createdAt     DateTime @default(now())
+
+  @@index([assessmentId])
+}
+
+// ---------- AI MSK CERTIFICATION ----------
+
+model VendorInquiry {
+  id            String   @id @default(cuid())
+  companyName   String
+  contactName   String
+  contactEmail  String
+  productName   String
+  modality      String
+  bodyParts     String
+  intendedUse   String
+  regulatoryStatus String?
+  stage         String   @default("inquiry")
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ---------- THE LUMEVAL REGISTRY ----------
+
+model RegistryEntry {
+  id            String   @id @default(cuid())
+  bodyPart      String
+  modality      String
+  questionAsked String
+  answer        String
+  finding       String
+  nextStep      String
+  signedBy      String
+  signedAt      DateTime
+  region        String?
+  sector        String?
+  caseAgeDays   Int?
+  bottleneckCategory String?
+  consentScope  String
+  createdAt     DateTime @default(now())
+
+  @@index([bodyPart])
+  @@index([sector])
+  @@index([region])
+}

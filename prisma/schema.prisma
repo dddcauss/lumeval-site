@@ -1,0 +1,183 @@
+// ============================================================
+// LUMEVAL — Prisma Schema (LOCAL DEV: SQLite)
+// ============================================================
+// SQLite is used for local dev and the sandbox. NOT for production.
+//
+// FOR PRODUCTION (Vercel + managed Postgres):
+//   1. cp prisma/schema.postgres.prisma prisma/schema.prisma
+//   2. Set DATABASE_URL to your Postgres connection string in .env
+//   3. bun run db:push
+//   4. bun run db:generate
+// See DEPLOYMENT.md for full instructions.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- MSK PASSPORT ----------
+
+model Worker {
+  id            String   @id @default(cuid())
+  // De-identified handle — no names, SINs, health card numbers at intake
+  handle        String   @unique
+  // Hashed passphrase for demo login (NOT production-grade auth)
+  passHash      String
+  region        String?
+  sector        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // ----- REGISTRY CONSENT -----
+  // Worker-owned. Grants permission for de-identified verdict data to be
+  // stored in the Lumeval Registry (for research, AI validation, surveillance
+  // analytics). Revocable at any time. Revoking stops future contributions;
+  // past de-identified entries have no link back to the worker and remain.
+  registryConsentGrantedAt  DateTime?
+  registryConsentRevokedAt  DateTime?
+  registryConsentScope      String?  // "research" | "ai-validation" | "surveillance" | "all"
+
+  verdicts      Verdict[]
+  grants        ConsentGrant[]
+}
+
+model Verdict {
+  id            String   @id @default(cuid())
+  workerId      String
+  worker        Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  // e.g. "lumbar-spine", "shoulder", "knee"
+  bodyPart      String
+  modality      String
+  // The one operational question answered
+  questionAsked String
+  // "yes" | "no" | "partial"
+  answer        String
+  finding       String
+  nextStep      String
+  // Physician signature line
+  signedBy      String
+  signedAt      DateTime @default(now())
+  // Standing limitation, always carried
+  limitation    String
+  createdAt     DateTime @default(now())
+
+  @@index([workerId])
+}
+
+model ConsentGrant {
+  id            String   @id @default(cuid())
+  workerId      String
+  worker        Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  // Who the worker is granting access to (employer / insurer / OH firm)
+  granteeType   String
+  granteeName   String
+  // "verdicts" | "all" — scope of access
+  scope         String   @default("verdicts")
+  // ISO date when access expires
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([workerId])
+}
+
+// ---------- STUCK-FILE DIAGNOSTIC ----------
+
+model DiagnosticAssessment {
+  id            String   @id @default(cuid())
+  // De-identified client/org handle (e.g. "Site A — open-pit coal")
+  clientHandle  String
+  reviewerEmail String?
+  createdAt     DateTime @default(now())
+  // Aggregate exposure inputs (de-identified)
+  totalOpenCases Int
+  cases90to180   Int
+  cases180Plus   Int
+  litigatedVisibilityOnly Int
+  cases          DiagnosticCase[]
+  // Computed outputs
+  estAvoidableDaysLow  Int
+  estAvoidableDaysHigh Int
+  estExposureLow       Int
+  estExposureHigh      Int
+  // JSON blob of category distribution
+  profileJson  String
+}
+
+model DiagnosticCase {
+  id            String   @id @default(cuid())
+  assessmentId  String
+  assessment    DiagnosticAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  caseRef       String   // de-identified e.g. "A-0412"
+  bodyPart      String
+  caseAgeDays   Int
+  // The 8-category taxonomy
+  bottleneck    String
+  // "open" | "owner-assigned" | "moved"
+  status        String   @default("open")
+  ownerAssigned String?
+  deadlineDays  Int?
+  createdAt     DateTime @default(now())
+
+  @@index([assessmentId])
+}
+
+// ---------- AI MSK CERTIFICATION (The Lumeval Standard) ----------
+
+model VendorInquiry {
+  id            String   @id @default(cuid())
+  // Vendor / product info
+  companyName   String
+  contactName   String
+  contactEmail  String
+  productName   String
+  // What the product does
+  modality      String   // e.g. "X-ray", "MRI", "CT", "Ultrasound"
+  bodyParts     String   // comma-separated e.g. "lumbar,shoulder,knee"
+  intendedUse   String
+  // Regulatory status
+  regulatoryStatus String? // e.g. "FDA 510(k) cleared", "Health Canada licensed", "CE marked", "None"
+  // Stage
+  stage         String   @default("inquiry") // inquiry | test-set-access | certification | certified
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ---------- THE LUMEVAL REGISTRY ----------
+// De-identified verdict snapshots. Created ONLY when a worker has active
+// registry consent at the time a verdict is signed. No workerId link —
+// this is the point: the registry is the dataset, separate from the
+// worker-owned Passport. This is the seed of the future platform.
+
+model RegistryEntry {
+  id            String   @id @default(cuid())
+  // NO workerId. This is the de-identified registry. Once written, the
+  // entry has no link back to the worker. (Verdict-of-origin reference
+  // is NOT stored — that's the privacy guarantee.)
+  bodyPart      String
+  modality      String
+  questionAsked String
+  answer        String
+  finding       String
+  nextStep      String
+  signedBy      String
+  signedAt      DateTime
+  // De-identified context metadata (the valuable part for the future platform)
+  region        String?   // e.g. "BC", "AB" — province only
+  sector        String?   // e.g. "mining", "construction", "oil-gas"
+  caseAgeDays   Int?      // how long the file was stuck before the verdict
+  bottleneckCategory String?  // from the 8-category taxonomy, if known
+  consentScope  String    // the scope the worker granted
+  createdAt     DateTime @default(now())
+
+  @@index([bodyPart])
+  @@index([sector])
+  @@index([region])
+}
+
